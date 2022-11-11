@@ -4,6 +4,7 @@ import {
   HomeFilled,
   UserOutlined,
   ProjectOutlined,
+  FileImageOutlined,
 } from "@ant-design/icons";
 import {
   Button,
@@ -20,6 +21,7 @@ import "./index.css";
 import ListAdmin from "./ListAdmin/index.js";
 import logo from "../../Image/20221111_194411_0000.png";
 import ListProduk from "./ListProduk";
+import ListPoster from "./ListPoster";
 
 const { Header, Sider, Content } = Layout;
 
@@ -57,8 +59,13 @@ const Home = () => {
               icon: <ProjectOutlined />,
               label: "Produk",
             },
-            user_credent.role_id === "3" && {
+            {
               key: "3",
+              icon: <FileImageOutlined />,
+              label: "Poster",
+            },
+            user_credent.role_id === "3" && {
+              key: "4",
               icon: <UserOutlined />,
               label: "Data Admin",
             },
@@ -105,7 +112,8 @@ const Home = () => {
           }}
         >
           {key === "2" && <ListProduk />}
-          {key === "3" && <ListAdmin />}
+          {key === "3" && <ListPoster />}
+          {key === "4" && <ListAdmin />}
         </Content>
       </Layout>
     </Layout>

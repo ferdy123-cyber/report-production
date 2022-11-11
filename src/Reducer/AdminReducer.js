@@ -1,6 +1,7 @@
 const initialstate = {
   listAdmin: [],
   listProduk: [],
+  listPoster: [],
   fetching: false,
   fetching2: false,
 };
@@ -28,6 +29,12 @@ const AdminReducer = (state = initialstate, action) => {
     return {
       ...state,
       listProduk: action.value,
+    };
+  }
+  if (action.type === "GET_LIST_POSTER") {
+    return {
+      ...state,
+      listPoster: action.value,
     };
   }
   return state;

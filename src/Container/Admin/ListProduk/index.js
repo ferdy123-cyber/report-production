@@ -21,46 +21,34 @@ import {
   BASE_URL,
   editListProduk,
 } from "../../../Reducer/Action";
-import Resizer from "react-image-file-resizer";
 
 const ListProduk = () => {
   const dispatch = useDispatch();
   const userState = useSelector((state) => state.adminReducer);
+  const [param, setparam] = useState({ limit: 10, offset: 0 });
   useEffect(() => {
-    dispatch(getListProduk());
-  }, []);
-  const resizeFile = (file) =>
-    new Promise((resolve) => {
-      Resizer.imageFileResizer(
-        file,
-        400,
-        400,
-        "WEBP",
-        100,
-        0,
-        (uri) => {
-          resolve(uri);
-        },
-        "file"
-      );
-    });
+    dispatch(getListProduk(param));
+  }, [param]);
   const columns = [
     {
       title: "Nama",
       dataIndex: "name",
       key: "name",
       // width: 250,
+      align: "center",
     },
     {
       title: "Harga",
       dataIndex: "price",
       key: "price",
+      align: "center",
       // render: (value) => <p>{Number(value) + 6}</p>,
     },
     {
-      title: "Gambar Produk",
+      title: "Gambar",
       dataIndex: "image",
       key: "image",
+      align: "center",
       render: (value, data) => (
         <Image
           src={BASE_URL + value}
@@ -72,6 +60,8 @@ const ListProduk = () => {
       title: "Deskripsi",
       dataIndex: "description",
       key: "description",
+      align: "center",
+      width: 550,
       render: (value) => (
         <Typography.Paragraph ellipsis={{ rows: 5, expandable: false }}>
           {value}
@@ -83,6 +73,7 @@ const ListProduk = () => {
       dataIndex: "aksi",
       key: "aksi",
       width: 150,
+      align: "center",
       render: (value, data) => (
         <div>
           <Button
@@ -122,17 +113,12 @@ const ListProduk = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const onFinish = async (value) => {
-    // console.log(value.image.file);
-    // const compressimg = await resizeFile(value.image.file);
-    // value.image = compressimg;
     dispatch(addListProduk(value));
-    // console.log(value.image);
     setIsModalOpen(false);
   };
   const onFinish2 = (value) => {
     value.id = data.id;
     dispatch(editListProduk(value));
-    // console.log(value);
     setIsModalOpen2(false);
   };
   const [data, setdata] = useState(null);
@@ -219,7 +205,7 @@ const ListProduk = () => {
         </Modal>
         <Modal
           footer={false}
-          title="Edit Admin"
+          title="Edit Produk"
           open={isModalOpen2}
           onOk={() => {
             setdata(null);
@@ -265,7 +251,14 @@ const ListProduk = () => {
         <Col span={12}>
           <Typography.Title level={5}>List Produk</Typography.Title>
         </Col>
-        <Col span={12} style={{ textAlign: "end" }}>
+        <Col span={12} style={{ textAlign: "end", display: "flex" }}>
+          <Input.Search
+            onPressEnter={(val) =>
+              setparam({ ...param, name: val.target.value })
+            }
+            style={{ marginRight: 30 }}
+            placeholder="Cari nama produk..."
+          />
           <Button onClick={() => setIsModalOpen(true)} type="primary">
             Tambah Produk
           </Button>
@@ -274,9 +267,15 @@ const ListProduk = () => {
       <Table
         loading={userState.fetching}
         style={{ marginTop: 20 }}
-        dataSource={userState.listProduk}
+        dataSource={userState.listProduk.data}
         columns={columns}
-        pagination={false}
+        pagination={{
+          total: userState.listProduk.total,
+          pageSize: param.limit,
+        }}
+        onChange={(page) => {
+          setparam({ ...param, offset: param.limit * (page.current - 1) });
+        }}
         rowKey={(row) => row.id}
       />
     </div>

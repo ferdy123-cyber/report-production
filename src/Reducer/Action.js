@@ -1,7 +1,7 @@
 import { message } from "antd";
 import axios from "axios";
 
-export const BASE_URL = "http://192.168.43.92/jamtangankuid_server";
+export const BASE_URL = "http://localhost/jamtangankuid_server";
 
 const err_handle = (err) => {
   // console.log(err);
@@ -91,11 +91,12 @@ export const login = (data) => (dispatch) => {
 };
 
 export const getListProduk = (data) => (dispatch) => {
+  console.log(data);
   dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: true });
   axios
-    .get(`${BASE_URL}/api/produk`, data)
+    .get(`${BASE_URL}/api/produk`, { params: data })
     .then((resp) => {
-      dispatch({ type: "GET_LIST_PRODUK", value: resp.data.data });
+      dispatch({ type: "GET_LIST_PRODUK", value: resp.data });
       dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
     })
     .catch((err) => {
@@ -127,7 +128,6 @@ export const addListProduk = (data) => (dispatch) => {
 };
 
 export const deleteListProduk = (data) => (dispatch) => {
-  console.log(data);
   dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: true });
   axios
     .delete(`${BASE_URL}/api/produk/${data}`)
@@ -143,7 +143,6 @@ export const deleteListProduk = (data) => (dispatch) => {
 };
 
 export const editListProduk = (data) => (dispatch) => {
-  console.log(data);
   dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: true });
   axios
     .put(`${BASE_URL}/api/produk/${data.id}`, data)
@@ -151,6 +150,55 @@ export const editListProduk = (data) => (dispatch) => {
       dispatch(getListProduk());
       dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
       message.success("Berhasil edit produk");
+    })
+    .catch((err) => {
+      err_handle(err);
+      dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
+    });
+};
+
+export const getListPoster = (data) => (dispatch) => {
+  dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: true });
+  axios
+    .get(`${BASE_URL}/api/poster`, { params: data })
+    .then((resp) => {
+      dispatch({ type: "GET_LIST_POSTER", value: resp.data });
+      dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
+    })
+    .catch((err) => {
+      err_handle(err);
+      dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
+    });
+};
+
+export const addListPoster = (data) => (dispatch) => {
+  console.log(data);
+  const formdata = new FormData();
+  formdata.append("image", data.image);
+  dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: true });
+  axios
+    .post(`${BASE_URL}/api/poster`, formdata, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+    .then((resp) => {
+      dispatch(getListPoster());
+      dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
+      message.success("Berhasil tambah poster");
+    })
+    .catch((err) => {
+      err_handle(err);
+      dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
+    });
+};
+
+export const deleteListPoster = (data) => (dispatch) => {
+  dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: true });
+  axios
+    .delete(`${BASE_URL}/api/poster/${data}`)
+    .then((resp) => {
+      dispatch(getListPoster());
+      dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
+      message.success("Berhasil hapus poster");
     })
     .catch((err) => {
       err_handle(err);

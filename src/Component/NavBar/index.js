@@ -44,9 +44,6 @@ const NavBar = () => {
           jamtanganku.id
         </Typography.Title>
       </div>
-      {/* <Search placeholder="input search text" 
-      // onSearch={onSearch}
-       enterButton /> */}
       <Input
         placeholder="Cari produk..."
         style={{
@@ -94,7 +91,7 @@ const NavBar = () => {
           backgroundColor: color.blue,
         }}
       >
-        Masuk
+        Daftar
       </Button>
     </div>
   );
