@@ -18,7 +18,7 @@ import React, { useState } from "react";
 // import { useSelector } from "react-redux";
 import "./index.css";
 import ListAdmin from "./ListAdmin/index.js";
-import logo from "../../Image/rlpTLlbMzTNYuZGGCVYM.png";
+import logo from "../../Image/20221111_194411_0000.png";
 import ListProduk from "./ListProduk";
 
 const { Header, Sider, Content } = Layout;

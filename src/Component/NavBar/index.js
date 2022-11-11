@@ -1,5 +1,5 @@
 import { Image, Typography, Input, Button } from "antd";
-import logo from "../../Image/rlpTLlbMzTNYuZGGCVYM.png";
+import logo from "../../Image/20221111_194411_0000.png";
 import { color } from "../../color";
 import {
   BellOutlined,
@@ -29,14 +29,15 @@ const NavBar = () => {
         }}
         className="logo"
       >
-        <Image src={logo} width={50} height={50} alt="" preview={false} />
+        <Image src={logo} width={70} height={70} alt="" preview={false} />
         <Typography.Title
           style={{
             color: color.white,
-            marginLeft: 10,
+            marginLeft: -10,
             fontWeight: 700,
             fontSize: 20,
             marginRight: 20,
+            marginTop: 10,
           }}
           level={5}
         >
@@ -59,14 +60,14 @@ const NavBar = () => {
       />
       <ShoppingOutlined
         style={{
-          color: color.orange,
+          color: color.blue,
           marginLeft: 15,
           fontSize: 30,
         }}
       />
       <BellOutlined
         style={{
-          color: color.orange,
+          color: color.blue,
           marginLeft: 15,
           fontSize: 30,
           marginRight: 15,
@@ -74,10 +75,10 @@ const NavBar = () => {
       />
       <Button
         style={{
-          borderColor: color.orange,
+          borderColor: color.blue,
           fontSize: 14,
           fontWeight: 600,
-          color: color.orange,
+          color: color.blue,
           backgroundColor: "transparent",
         }}
       >
@@ -85,12 +86,12 @@ const NavBar = () => {
       </Button>
       <Button
         style={{
-          borderColor: color.orange,
+          borderColor: color.blue,
           fontSize: 14,
           fontWeight: 600,
           marginLeft: 15,
           color: color.black,
-          backgroundColor: color.orange,
+          backgroundColor: color.blue,
         }}
       >
         Masuk

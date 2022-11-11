@@ -73,7 +73,7 @@ const ListProduk = () => {
       dataIndex: "description",
       key: "description",
       render: (value) => (
-        <Typography.Paragraph ellipsis={{ rows: 5, expandable: true }}>
+        <Typography.Paragraph ellipsis={{ rows: 5, expandable: false }}>
           {value}
         </Typography.Paragraph>
       ),

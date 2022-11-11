@@ -15,10 +15,10 @@ export const NotLoginAdminRoute = ({ children }) => {
 
 export const AdminRoute = ({ children }) => {
   if (!user_credent) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/admin/login" replace />;
   }
   if (user_credent.role_id == 2) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/admin/login" replace />;
   }
   return children;
 };
