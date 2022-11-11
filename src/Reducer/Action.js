@@ -1,7 +1,7 @@
 import { message } from "antd";
 import axios from "axios";
 
-export const BASE_URL = "http://localhost/jamtangankuid-server";
+export const BASE_URL = "http://192.168.43.92/jamtangankuid_server";
 
 const err_handle = (err) => {
   // console.log(err);
