@@ -6,6 +6,7 @@ import LoginAdmin from "./Container/LoginAdmin";
 import Home from "./Container/Home";
 import { AdminRoute, NotLoginAdminRoute } from "./ProtectedRoute";
 import Search from "./Container/Search";
+import "react-loading-skeleton/dist/skeleton.css";
 
 function App() {
   return (
