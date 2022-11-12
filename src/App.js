@@ -5,6 +5,7 @@ import "antd/dist/antd.css";
 import LoginAdmin from "./Container/LoginAdmin";
 import Home from "./Container/Home";
 import { AdminRoute, NotLoginAdminRoute } from "./ProtectedRoute";
+import Search from "./Container/Search";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           }
         />
         <Route path="/" element={<Home />} />
+        <Route path="/q/:key" element={<Search />} />
       </Routes>
     </BrowserRouter>
   );

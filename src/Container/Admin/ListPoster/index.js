@@ -26,7 +26,7 @@ import ImgCrop from "antd-img-crop";
 const ListPoster = () => {
   const dispatch = useDispatch();
   const adminState = useSelector((state) => state.adminReducer);
-  const [param, setparam] = useState({ limit: 10, offset: 0 });
+  const [param, setparam] = useState({ limit: 3, offset: 0 });
   useEffect(() => {
     dispatch(getListPoster(param));
   }, [param]);
@@ -59,7 +59,9 @@ const ListPoster = () => {
         <div>
           <Popconfirm
             title="Are you sure to delete this task?"
-            onConfirm={() => dispatch(deleteListPoster(data.id))}
+            onConfirm={() =>
+              dispatch(deleteListPoster({ data: data.id, param: param }))
+            }
             // onCancel={cancel}
             okText="Yes"
             cancelText="No"
@@ -79,7 +81,7 @@ const ListPoster = () => {
   ];
   const [isModalOpen, setIsModalOpen] = useState(false);
   const onFinish = async () => {
-    dispatch(addListPoster({ image: image }));
+    dispatch(addListPoster({ image: image, param: param }));
     // setFileList([]);
     // setImage(null);
     setIsModalOpen(false);
@@ -166,10 +168,10 @@ const ListPoster = () => {
       <Table
         loading={adminState.fetching}
         style={{ marginTop: 20 }}
-        dataSource={adminState.listPoster.data}
+        dataSource={adminState.listPoster && adminState.listPoster.data}
         columns={columns}
         pagination={{
-          total: adminState.listPoster.total,
+          total: adminState.listPoster && adminState.listPoster.total,
           pageSize: param.limit,
         }}
         onChange={(page) => {

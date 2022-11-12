@@ -74,7 +74,6 @@ export const editListAdmin = (data) => (dispatch) => {
 };
 
 export const login = (data) => (dispatch) => {
-  console.log(data);
   dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: true });
   axios
     .post(`${BASE_URL}/api/login`, data)
@@ -91,12 +90,27 @@ export const login = (data) => (dispatch) => {
 };
 
 export const getListProduk = (data) => (dispatch) => {
-  console.log(data);
   dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: true });
   axios
     .get(`${BASE_URL}/api/produk`, { params: data })
     .then((resp) => {
       dispatch({ type: "GET_LIST_PRODUK", value: resp.data });
+      console.log("produk", { ...data, length: resp.data.data.length });
+      dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
+    })
+    .catch((err) => {
+      err_handle(err);
+      dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
+    });
+};
+
+export const getListProdukByTerlaris = (data) => (dispatch) => {
+  dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: true });
+  axios
+    .get(`${BASE_URL}/api/produk/sort_terlaris`, { params: data })
+    .then((resp) => {
+      dispatch({ type: "GET_LIST_PRODUK", value: resp.data });
+      console.log("produk", { ...data, length: resp.data.data.length });
       dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
     })
     .catch((err) => {
@@ -107,17 +121,18 @@ export const getListProduk = (data) => (dispatch) => {
 
 export const addListProduk = (data) => (dispatch) => {
   const formdata = new FormData();
-  formdata.append("name", data.name);
-  formdata.append("price", data.price);
-  formdata.append("description", data.description);
-  formdata.append("image", data.image.file);
+  formdata.append("name", data.data.name);
+  formdata.append("price", data.data.price);
+  formdata.append("stok", data.data.stok);
+  formdata.append("description", data.data.description);
+  formdata.append("image", data.data.image.file);
   dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: true });
   axios
     .post(`${BASE_URL}/api/produk`, formdata, {
       headers: { "Content-Type": "multipart/form-data" },
     })
     .then((resp) => {
-      dispatch(getListProduk());
+      dispatch(getListProduk(data.param));
       dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
       message.success("Berhasil tambah produk");
     })
@@ -130,9 +145,9 @@ export const addListProduk = (data) => (dispatch) => {
 export const deleteListProduk = (data) => (dispatch) => {
   dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: true });
   axios
-    .delete(`${BASE_URL}/api/produk/${data}`)
+    .delete(`${BASE_URL}/api/produk/${data.data}`)
     .then((resp) => {
-      dispatch(getListProduk());
+      dispatch(getListProduk(data.param));
       dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
       message.success("Berhasil hapus produk");
     })
@@ -145,9 +160,9 @@ export const deleteListProduk = (data) => (dispatch) => {
 export const editListProduk = (data) => (dispatch) => {
   dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: true });
   axios
-    .put(`${BASE_URL}/api/produk/${data.id}`, data)
+    .put(`${BASE_URL}/api/produk/${data.data.id}`, data.data)
     .then((resp) => {
-      dispatch(getListProduk());
+      dispatch(getListProduk(data.param));
       dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
       message.success("Berhasil edit produk");
     })
@@ -163,6 +178,7 @@ export const getListPoster = (data) => (dispatch) => {
     .get(`${BASE_URL}/api/poster`, { params: data })
     .then((resp) => {
       dispatch({ type: "GET_LIST_POSTER", value: resp.data });
+      console.log("poster", { ...data, length: resp.data.data.length });
       dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
     })
     .catch((err) => {
@@ -172,7 +188,6 @@ export const getListPoster = (data) => (dispatch) => {
 };
 
 export const addListPoster = (data) => (dispatch) => {
-  console.log(data);
   const formdata = new FormData();
   formdata.append("image", data.image);
   dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: true });
@@ -181,7 +196,7 @@ export const addListPoster = (data) => (dispatch) => {
       headers: { "Content-Type": "multipart/form-data" },
     })
     .then((resp) => {
-      dispatch(getListPoster());
+      dispatch(getListPoster(data.param));
       dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
       message.success("Berhasil tambah poster");
     })
@@ -194,11 +209,71 @@ export const addListPoster = (data) => (dispatch) => {
 export const deleteListPoster = (data) => (dispatch) => {
   dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: true });
   axios
-    .delete(`${BASE_URL}/api/poster/${data}`)
+    .delete(`${BASE_URL}/api/poster/${data.data}`)
     .then((resp) => {
-      dispatch(getListPoster());
+      dispatch(getListPoster(data.param));
       dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
       message.success("Berhasil hapus poster");
+    })
+    .catch((err) => {
+      err_handle(err);
+      dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
+    });
+};
+
+export const getListProdukPromo = (data) => (dispatch) => {
+  dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: true });
+  axios
+    .get(`${BASE_URL}/api/produk/promo`, { params: data })
+    .then((resp) => {
+      dispatch({ type: "GET_LIST_PRODUK_PROMO", value: resp.data });
+      console.log("promo", { ...data, length: resp.data.data.length });
+      dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
+    })
+    .catch((err) => {
+      err_handle(err);
+      dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
+    });
+};
+
+export const changeListPromo = (data) => (dispatch) => {
+  dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: true });
+  axios
+    .put(`${BASE_URL}/api/produk/${data.id}`, data.data)
+    .then((resp) => {
+      dispatch(getListProdukPromo(data.param));
+      dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
+      message.success("Berhasil edit promo");
+    })
+    .catch((err) => {
+      err_handle(err);
+      dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
+    });
+};
+
+export const getListProdukRekomended = (data) => (dispatch) => {
+  dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: true });
+  axios
+    .get(`${BASE_URL}/api/produk/rekomended`, { params: data })
+    .then((resp) => {
+      dispatch({ type: "GET_LIST_PRODUK_REKOMENDED", value: resp.data });
+      console.log("rekomendasi", { ...data, length: resp.data.data.length });
+      dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
+    })
+    .catch((err) => {
+      err_handle(err);
+      dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
+    });
+};
+
+export const changeListRekomendasi = (data) => (dispatch) => {
+  dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: true });
+  axios
+    .put(`${BASE_URL}/api/produk/${data.id}`, data.data)
+    .then((resp) => {
+      dispatch(getListProdukRekomended(data.param));
+      dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
+      message.success("Berhasil edit rekomendasi");
     })
     .catch((err) => {
       err_handle(err);

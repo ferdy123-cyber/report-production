@@ -69,6 +69,13 @@ const ListProduk = () => {
       ),
     },
     {
+      title: "Stok",
+      dataIndex: "stok",
+      key: "stok",
+      align: "center",
+      // render: (value) => <p>{Number(value) + 6}</p>,
+    },
+    {
       title: "Aksi",
       dataIndex: "aksi",
       key: "aksi",
@@ -92,7 +99,9 @@ const ListProduk = () => {
           </Button>
           <Popconfirm
             title="Are you sure to delete this task?"
-            onConfirm={() => dispatch(deleteListProduk(data.id))}
+            onConfirm={() =>
+              dispatch(deleteListProduk({ data: data.id, param: param }))
+            }
             // onCancel={cancel}
             okText="Yes"
             cancelText="No"
@@ -113,12 +122,12 @@ const ListProduk = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const onFinish = async (value) => {
-    dispatch(addListProduk(value));
+    dispatch(addListProduk({ data: value, param: param }));
     setIsModalOpen(false);
   };
   const onFinish2 = (value) => {
     value.id = data.id;
-    dispatch(editListProduk(value));
+    dispatch(editListProduk({ data: value, param: param }));
     setIsModalOpen2(false);
   };
   const [data, setdata] = useState(null);
@@ -158,6 +167,14 @@ const ListProduk = () => {
             </Form.Item>
 
             <Form.Item
+              label="Stok"
+              name="stok"
+              rules={[{ required: true, message: "Stok tidak boleh kosong!" }]}
+            >
+              <InputNumber />
+            </Form.Item>
+
+            <Form.Item
               label="Deskripsi"
               name="description"
               rules={[
@@ -178,11 +195,6 @@ const ListProduk = () => {
                 listType="picture-card"
                 maxCount={1}
                 beforeUpload={() => false}
-                // onChange={async (image) => {
-                //   console.log(image.file);
-                //   const imagecompress = await resizeFile(image.file);
-                //   setImage(imagecompress);
-                // }}
               >
                 <div>
                   <p>Upload</p>
@@ -230,6 +242,13 @@ const ListProduk = () => {
             value={data && data.price}
             placeholder=""
           />
+          <Typography.Text>Stok : </Typography.Text>
+          <InputNumber
+            style={{ width: "100%" }}
+            onChange={(val) => setdata({ ...data, stok: val })}
+            value={data && data.stok}
+            placeholder=""
+          />
           <Typography.Text>Deskripsi : </Typography.Text>
           <Input.TextArea
             rows={5}
@@ -254,7 +273,7 @@ const ListProduk = () => {
         <Col span={12} style={{ textAlign: "end", display: "flex" }}>
           <Input.Search
             onPressEnter={(val) =>
-              setparam({ ...param, name: val.target.value })
+              setparam({ ...param, name: val.target.value, offset: 0 })
             }
             style={{ marginRight: 30 }}
             placeholder="Cari nama produk..."
@@ -267,10 +286,10 @@ const ListProduk = () => {
       <Table
         loading={userState.fetching}
         style={{ marginTop: 20 }}
-        dataSource={userState.listProduk.data}
+        dataSource={userState.listProduk && userState.listProduk.data}
         columns={columns}
         pagination={{
-          total: userState.listProduk.total,
+          total: userState.listProduk && userState.listProduk.total,
           pageSize: param.limit,
         }}
         onChange={(page) => {

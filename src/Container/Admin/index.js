@@ -5,6 +5,8 @@ import {
   UserOutlined,
   ProjectOutlined,
   FileImageOutlined,
+  FallOutlined,
+  CheckSquareOutlined,
 } from "@ant-design/icons";
 import {
   Button,
@@ -22,6 +24,9 @@ import ListAdmin from "./ListAdmin/index.js";
 import logo from "../../Image/20221111_194411_0000.png";
 import ListProduk from "./ListProduk";
 import ListPoster from "./ListPoster";
+import ListPromo from "./ListPromo";
+import ListRekomended from "./ListRekomended";
+import Dashboard from "./Dashboard";
 
 const { Header, Sider, Content } = Layout;
 
@@ -64,8 +69,18 @@ const Home = () => {
               icon: <FileImageOutlined />,
               label: "Poster",
             },
-            user_credent.role_id === "3" && {
+            {
               key: "4",
+              icon: <FallOutlined />,
+              label: "Promo",
+            },
+            {
+              key: "5",
+              icon: <CheckSquareOutlined />,
+              label: "Rekomendasi",
+            },
+            user_credent.role_id === "3" && {
+              key: "6",
               icon: <UserOutlined />,
               label: "Data Admin",
             },
@@ -111,9 +126,12 @@ const Home = () => {
             overflow: "auto",
           }}
         >
+          {key === "1" && <Dashboard />}
           {key === "2" && <ListProduk />}
           {key === "3" && <ListPoster />}
-          {key === "4" && <ListAdmin />}
+          {key === "4" && <ListPromo />}
+          {key === "5" && <ListRekomended />}
+          {key === "6" && <ListAdmin />}
         </Content>
       </Layout>
     </Layout>

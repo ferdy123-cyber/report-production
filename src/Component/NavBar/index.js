@@ -1,14 +1,14 @@
 import { Image, Typography, Input, Button } from "antd";
 import logo from "../../Image/20221111_194411_0000.png";
 import { color } from "../../color";
-import {
-  BellOutlined,
-  SearchOutlined,
-  ShoppingOutlined,
-} from "@ant-design/icons";
+import { BellOutlined, ShoppingOutlined } from "@ant-design/icons";
 import "./index.css";
+import { useNavigate } from "react-router";
+import { useState } from "react";
 
 const NavBar = () => {
+  const navigate = useNavigate();
+  const [search, setSearch] = useState("");
   return (
     <div
       style={{
@@ -19,21 +19,24 @@ const NavBar = () => {
         alignItems: "center",
         paddingLeft: "10%",
         paddingRight: "10%",
+        position: "fixed",
+        zIndex: 99,
       }}
     >
       <div
+        onClick={() => navigate("/")}
         style={{
           textAlign: "center",
           display: "flex",
           alignItems: "center",
+          cursor: "pointer",
         }}
         className="logo"
       >
-        <Image src={logo} width={70} height={70} alt="" preview={false} />
+        <Image src={logo} width={50} height={50} alt="" preview={false} />
         <Typography.Title
           style={{
             color: color.white,
-            marginLeft: -10,
             fontWeight: 700,
             fontSize: 20,
             marginRight: 20,
@@ -45,6 +48,13 @@ const NavBar = () => {
         </Typography.Title>
       </div>
       <Input
+        value={search}
+        onPressEnter={() => {
+          if (search !== "") {
+            navigate(`/q/${search}`);
+          }
+        }}
+        onChange={(val) => setSearch(val.target.value)}
         placeholder="Cari produk..."
         style={{
           color: color.white,
