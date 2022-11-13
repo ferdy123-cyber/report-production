@@ -2,7 +2,7 @@
 import { Form, Input, Button, Alert, message, Image } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import React from "react";
-import logo from "../../Image/rlpTLlbMzTNYuZGGCVYM.png";
+import logo from "../../Image/20221111_194411_0000.png";
 import { login } from "../../Reducer/Action";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";

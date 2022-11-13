@@ -15,7 +15,7 @@ import SeparatorRibuan from "../../SeparatorRibuan";
 const Search = () => {
   const { key } = useParams();
   const dispatch = useDispatch();
-  const [param, setparam] = useState({ limit: 4, offset: 0 });
+  const [param, setparam] = useState({ limit: 24, offset: 0 });
   const [page, setpage] = useState(1);
   useEffect(() => {
     dispatch(getListProduk(param));
@@ -32,7 +32,7 @@ const Search = () => {
       <div
         style={{
           minHeight: "100vh",
-          width: "100vw",
+          width: "100%",
           backgroundColor: color.black,
           color: color.white,
           paddingTop: 100,
