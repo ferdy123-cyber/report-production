@@ -1,6 +1,6 @@
 import { ImportOutlined, ShoppingOutlined } from "@ant-design/icons";
-import { Col, Image, Row, Typography } from "antd";
-import { useEffect } from "react";
+import { Button, Col, Image, Input, InputNumber, Row, Typography } from "antd";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { color } from "../../color";
@@ -15,9 +15,10 @@ const DetailProduk = () => {
   useEffect(() => {
     dispatch(getDetailProduk(id));
   }, [id]);
-  console.log(produkState);
+  const [qty, setQty] = useState(1);
+  console.log(qty);
   return (
-    <div>
+    <>
       <NavBar />
       <div
         style={{
@@ -29,16 +30,20 @@ const DetailProduk = () => {
           paddingLeft: "10%",
           paddingRight: "10%",
           paddingBottom: 10,
+          display: "flex",
         }}
       >
         {produkState.detailProduk && (
-          <Row>
-            {/* <Col span={18}>
-              <Typography.Title level={2} style={{ color: color.white }}>
-                {produkState.detailProduk.name}
-              </Typography.Title>
-            </Col> */}
-            <Col span={10}>
+          <>
+            <div
+              style={{
+                width: "40%",
+                position: "sticky",
+                height: "fit-content",
+                top: 120,
+                paddingBottom: 20,
+              }}
+            >
               <Image
                 src={BASE_URL + produkState.detailProduk.image}
                 width={"100%"}
@@ -48,10 +53,15 @@ const DetailProduk = () => {
                   borderRadius: 10,
                 }}
               />
-            </Col>
-            <Col
-              span={14}
-              style={{ padding: 15, paddingLeft: 25, paddingTop: 0 }}
+            </div>
+            <div
+              style={{
+                width: "60%",
+                padding: 15,
+                paddingLeft: 25,
+                paddingTop: 0,
+                paddingBottom: 0,
+              }}
             >
               <Typography.Title level={2} style={{ color: color.white }}>
                 {produkState.detailProduk.name}
@@ -123,6 +133,68 @@ const DetailProduk = () => {
                   </div>
                 </Col>
               </Row>
+              <Button
+                onClick={() => {
+                  if (qty <= 1) {
+                    setQty(1);
+                  } else {
+                    setQty(qty - 1);
+                  }
+                }}
+              >
+                -
+              </Button>
+              <Input
+                type={"number"}
+                value={qty}
+                onChange={(val) => {
+                  if (val.target.value.length <= 3) {
+                    setQty(Number(val.target.value));
+                  }
+                }}
+                style={{
+                  marginTop: 15,
+                  width: 50,
+                  textAlign: "center",
+                  fontWeight: 600,
+                }}
+              />
+              <Button
+                onClick={() => {
+                  setQty(qty + 1);
+                }}
+              >
+                +
+              </Button>
+              <div style={{ marginTop: 20 }}>
+                <Button
+                  style={{
+                    width: 200,
+                    height: 50,
+                    borderColor: color.blue,
+                    fontSize: 14,
+                    fontWeight: 600,
+                    color: color.blue,
+                    backgroundColor: "transparent",
+                  }}
+                >
+                  + Keranjang
+                </Button>
+                <Button
+                  style={{
+                    width: 200,
+                    height: 50,
+                    borderColor: color.blue,
+                    fontSize: 14,
+                    fontWeight: 600,
+                    marginLeft: 15,
+                    color: color.black,
+                    backgroundColor: color.blue,
+                  }}
+                >
+                  Beli Langsung
+                </Button>
+              </div>
               <Typography.Title
                 level={5}
                 style={{ color: color.blue, marginTop: 25 }}
@@ -134,11 +206,14 @@ const DetailProduk = () => {
               >
                 {produkState.detailProduk.description}
               </Typography.Paragraph>
-            </Col>
-          </Row>
+            </div>
+          </>
         )}
       </div>
-    </div>
+      {/* <div
+        style={{ width: "100%", height: 1000, backgroundColor: "red" }}
+      ></div> */}
+    </>
   );
 };
 

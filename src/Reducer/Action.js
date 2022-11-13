@@ -1,7 +1,7 @@
 import { message } from "antd";
 import axios from "axios";
 
-export const BASE_URL = "http://192.168.50.92/jamtangankuid_server";
+export const BASE_URL = "http://localhost/jamtangankuid_server";
 
 const err_handle = (err) => {
   // console.log(err);
@@ -78,6 +78,12 @@ export const login = (data) => (dispatch) => {
   axios
     .post(`${BASE_URL}/api/login`, data)
     .then((resp) => {
+      // console.log(resp.data.data.role_id);
+      if (resp.data.data.role_id == 2) {
+        dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
+        message.error("user tidak terdaftar sebagai admin");
+        return;
+      }
       localStorage.setItem("user_credent", JSON.stringify(resp.data.data));
       dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
       message.success(resp.data.message);
@@ -292,5 +298,42 @@ export const getDetailProduk = (id) => (dispatch) => {
     .catch((err) => {
       err_handle(err);
       dispatch({ type: "CHANGE_FETCHING", value: false });
+    });
+};
+
+export const registerMember = (data) => (dispatch) => {
+  dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: true });
+  axios
+    .post(`${BASE_URL}/api/registrasi/`, data)
+    .then((resp) => {
+      dispatch(getListAdmin());
+      dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
+      message.success("Berhasil daftar");
+    })
+    .catch((err) => {
+      err_handle(err);
+      dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
+    });
+};
+
+export const loginMember = (data) => (dispatch) => {
+  dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: true });
+  axios
+    .post(`${BASE_URL}/api/login`, data)
+    .then((resp) => {
+      console.log(resp.data.data.role_id);
+      if (resp.data.data.role_id != 2) {
+        dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
+        message.error("user tidak terdaftar sebagai member");
+        return;
+      }
+      localStorage.setItem("member_credent", JSON.stringify(resp.data.data));
+      dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
+      message.success(resp.data.message);
+      window.location.reload(false);
+    })
+    .catch((err) => {
+      err_handle(err);
+      dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
     });
 };

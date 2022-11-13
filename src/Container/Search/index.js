@@ -51,18 +51,14 @@ const Search = () => {
             fontSize: 22,
           }}
         >
-          Menampilkan hasil untuk
-        </Typography.Text>{" "}
-        <Typography.Text
-          level={4}
-          style={{
-            color: color.blue,
-            fontWeight: 600,
-            marginTop: 20,
-            fontSize: 22,
-          }}
-        >
-          {key}
+          Menampilkan hasil untuk{" "}
+          <span
+            style={{
+              color: color.blue,
+            }}
+          >
+            {key}
+          </span>
         </Typography.Text>
         <div style={{ marginTop: 20, marginBottom: 20 }}>
           <Button
