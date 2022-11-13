@@ -7,6 +7,7 @@ import Home from "./Container/Home";
 import { AdminRoute, NotLoginAdminRoute } from "./ProtectedRoute";
 import Search from "./Container/Search";
 import "react-loading-skeleton/dist/skeleton.css";
+import DetailProduk from "./Container/DetailProduk";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         />
         <Route path="/" element={<Home />} />
         <Route path="/q/:key" element={<Search />} />
+        <Route path="/detail/:id" element={<DetailProduk />} />
       </Routes>
     </BrowserRouter>
   );
