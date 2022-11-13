@@ -13,8 +13,10 @@ import {
 import SeparatorRibuan from "../../SeparatorRibuan";
 import "./index.css";
 import Skeleton from "react-loading-skeleton";
+import { useNavigate } from "react-router";
 
 const Home = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getListPoster({ limit: 3 }));
@@ -27,7 +29,7 @@ const Home = () => {
     dispatch(getListProduk(param));
   }, [param]);
   const adminState = useSelector((state) => state.adminReducer);
-  console.log(adminState.fetching);
+  // console.log(adminState.fetching);
   return (
     <div>
       <NavBar />
@@ -108,7 +110,12 @@ const Home = () => {
               {adminState.listProdukPromo &&
                 adminState.listProdukPromo.data.map((e) => {
                   return (
-                    <Col key={e.id} span={4} style={{ cursor: "pointer" }}>
+                    <Col
+                      onClick={() => navigate(`/detail/${e.id}`)}
+                      key={e.id}
+                      span={4}
+                      style={{ cursor: "pointer" }}
+                    >
                       <div
                         style={{
                           width: "100%",
@@ -172,6 +179,7 @@ const Home = () => {
                 adminState.listProduk.data.map((e) => {
                   return (
                     <Col
+                      onClick={() => navigate(`/detail/${e.id}`)}
                       key={e.id}
                       span={4}
                       // offset={1}
@@ -280,7 +288,12 @@ const Home = () => {
               {adminState.listProdukRekomended &&
                 adminState.listProdukRekomended.data.map((e) => {
                   return (
-                    <Col key={e.id} span={4} style={{ cursor: "pointer" }}>
+                    <Col
+                      onClick={() => navigate(`/detail/${e.id}`)}
+                      key={e.id}
+                      span={4}
+                      style={{ cursor: "pointer" }}
+                    >
                       <div
                         style={{
                           width: "100%",
