@@ -2,7 +2,7 @@ import { Button, Col, Image, Pagination, Row, Typography } from "antd";
 import { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { color } from "../../color";
 import NavBar from "../../Component/NavBar";
 import {
@@ -14,6 +14,7 @@ import SeparatorRibuan from "../../SeparatorRibuan";
 
 const Search = () => {
   const { key } = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [param, setparam] = useState({ limit: 24, offset: 0 });
   const [page, setpage] = useState(1);
@@ -146,6 +147,7 @@ const Search = () => {
               adminState.listProduk.data.map((e) => {
                 return (
                   <Col
+                    onClick={() => navigate(`/detail/${e.id}`)}
                     key={e.id}
                     span={4}
                     // offset={1}

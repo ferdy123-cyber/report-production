@@ -5,8 +5,9 @@ import {
 } from "redux";
 import thunk from "redux-thunk";
 import adminReducer from "./Reducer/AdminReducer";
+import produkReducer from "./Reducer/ProdukReducer";
 
-const root = combineReducers({ adminReducer });
+const root = combineReducers({ adminReducer, produkReducer });
 
 const store = createStore(root, applyMiddleware(thunk));
 

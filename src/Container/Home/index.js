@@ -20,7 +20,7 @@ const Home = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getListPoster({ limit: 3 }));
-    dispatch(getListProdukPromo({ limit: 6 }));
+    dispatch(getListProdukPromo({ limit: 12 }));
     dispatch(getListProdukRekomended({ limit: 6 }));
   }, []);
   const [param, setparam] = useState({ limit: 24, offset: 0 });

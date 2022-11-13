@@ -280,3 +280,17 @@ export const changeListRekomendasi = (data) => (dispatch) => {
       dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
     });
 };
+
+export const getDetailProduk = (id) => (dispatch) => {
+  dispatch({ type: "CHANGE_FETCHING", value: true });
+  axios
+    .get(`${BASE_URL}/api/produk/detail/${id}`)
+    .then((resp) => {
+      dispatch({ type: "GET_DETAIL_PRODUK", value: resp.data.data });
+      dispatch({ type: "CHANGE_FETCHING", value: false });
+    })
+    .catch((err) => {
+      err_handle(err);
+      dispatch({ type: "CHANGE_FETCHING", value: false });
+    });
+};
