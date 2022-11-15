@@ -7,6 +7,7 @@ import { color } from "../../color";
 import NavBar from "../../Component/NavBar";
 import { addToCart, BASE_URL, getDetailProduk } from "../../Reducer/Action";
 import SeparatorRibuan from "../../SeparatorRibuan";
+import Skeleton from "react-loading-skeleton";
 
 const DetailProduk = () => {
   const dispatch = useDispatch();
@@ -17,7 +18,7 @@ const DetailProduk = () => {
     dispatch(getDetailProduk(id));
   }, [id]);
   const [qty, setQty] = useState(1);
-  console.log(produkState.fetching2);
+
   return (
     <>
       <NavBar />
@@ -34,7 +35,52 @@ const DetailProduk = () => {
           display: "flex",
         }}
       >
-        {produkState.detailProduk && (
+        {produkState.fetching && (
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+            }}
+          >
+            <div style={{ width: "40%" }}>
+              <Skeleton
+                duration={1.5}
+                baseColor="#3f3f3f"
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  aspectRatio: 1 / 1,
+                  borderRadius: 10,
+                }}
+              />
+            </div>
+            <div style={{ width: "60%", paddingLeft: 25 }}>
+              <Skeleton
+                duration={1.5}
+                baseColor="#3f3f3f"
+                style={{
+                  width: "100%",
+                  height: 100,
+                  aspectRatio: 1 / 1,
+                  borderRadius: 10,
+                }}
+              />
+              <Skeleton
+                count={7}
+                duration={1.5}
+                baseColor="#3f3f3f"
+                style={{
+                  width: "100%",
+                  height: 50,
+                  aspectRatio: 1 / 1,
+                  borderRadius: 10,
+                  marginTop: 10,
+                }}
+              />
+            </div>
+          </div>
+        )}
+        {produkState.detailProduk && !produkState.fetching && (
           <>
             <div
               style={{
