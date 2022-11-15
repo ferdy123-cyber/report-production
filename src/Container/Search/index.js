@@ -234,6 +234,7 @@ const Search = () => {
           }}
         >
           <Pagination
+            showSizeChanger={false}
             current={page}
             pageSize={param.limit}
             total={adminState.listProduk && adminState.listProduk.total}

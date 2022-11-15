@@ -21,7 +21,7 @@ const Home = () => {
   useEffect(() => {
     dispatch(getListPoster({ limit: 3 }));
     dispatch(getListProdukPromo({ limit: 12 }));
-    dispatch(getListProdukRekomended({ limit: 6 }));
+    dispatch(getListProdukRekomended({ limit: 12 }));
   }, []);
   const [param, setparam] = useState({ limit: 24, offset: 0 });
   const [page, setpage] = useState(1);
@@ -269,6 +269,7 @@ const Home = () => {
               }}
             >
               <Pagination
+                showSizeChanger={false}
                 current={page}
                 pageSize={param.limit}
                 total={adminState.listProduk && adminState.listProduk.total}

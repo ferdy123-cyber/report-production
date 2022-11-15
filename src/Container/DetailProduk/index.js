@@ -1,22 +1,23 @@
 import { ImportOutlined, ShoppingOutlined } from "@ant-design/icons";
-import { Button, Col, Image, Input, InputNumber, Row, Typography } from "antd";
+import { Button, Col, Image, Input, message, Row, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { color } from "../../color";
 import NavBar from "../../Component/NavBar";
-import { BASE_URL, getDetailProduk } from "../../Reducer/Action";
+import { addToCart, BASE_URL, getDetailProduk } from "../../Reducer/Action";
 import SeparatorRibuan from "../../SeparatorRibuan";
 
 const DetailProduk = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
+  const member_credent = JSON.parse(localStorage.getItem("member_credent"));
   const produkState = useSelector((state) => state.produkReducer);
   useEffect(() => {
     dispatch(getDetailProduk(id));
   }, [id]);
   const [qty, setQty] = useState(1);
-  console.log(qty);
+  console.log(produkState.fetching2);
   return (
     <>
       <NavBar />
@@ -167,20 +168,59 @@ const DetailProduk = () => {
                 +
               </Button>
               <div style={{ marginTop: 20 }}>
+                {produkState.fetching2 ? (
+                  <Button
+                    loading
+                    style={{
+                      width: 200,
+                      height: 50,
+                      borderColor: color.blue,
+                      fontSize: 14,
+                      fontWeight: 600,
+                      color: color.blue,
+                      backgroundColor: "transparent",
+                    }}
+                  >
+                    Loading
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => {
+                      if (member_credent) {
+                        dispatch(
+                          addToCart({
+                            user_id: member_credent.id,
+                            produk_id: produkState.detailProduk.id,
+                            quantity: qty,
+                            transaction_id: 0,
+                          })
+                        );
+                      } else {
+                        message.error(
+                          "silahkan login untuk melakukan pembelian"
+                        );
+                      }
+                    }}
+                    style={{
+                      width: 200,
+                      height: 50,
+                      borderColor: color.blue,
+                      fontSize: 14,
+                      fontWeight: 600,
+                      color: color.blue,
+                      backgroundColor: "transparent",
+                    }}
+                  >
+                    + Keranjang
+                  </Button>
+                )}
                 <Button
-                  style={{
-                    width: 200,
-                    height: 50,
-                    borderColor: color.blue,
-                    fontSize: 14,
-                    fontWeight: 600,
-                    color: color.blue,
-                    backgroundColor: "transparent",
+                  onClick={() => {
+                    if (member_credent) {
+                    } else {
+                      message.error("silahkan login untuk melakukan pembelian");
+                    }
                   }}
-                >
-                  + Keranjang
-                </Button>
-                <Button
                   style={{
                     width: 200,
                     height: 50,

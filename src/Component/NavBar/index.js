@@ -7,6 +7,7 @@ import {
   Form,
   Popover,
   message,
+  Badge,
 } from "antd";
 import logo from "../../Image/20221111_194411_0000.png";
 import { color } from "../../color";
@@ -18,14 +19,15 @@ import {
 } from "@ant-design/icons";
 import "./index.css";
 import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { loginMember, registerMember } from "../../Reducer/Action";
+import { getListCart, loginMember, registerMember } from "../../Reducer/Action";
 
 const NavBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const produkReducer = useSelector((state) => state.produkReducer);
   const member_credent = JSON.parse(localStorage.getItem("member_credent"));
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,7 +44,10 @@ const NavBar = () => {
     // console.log(value);
     dispatch(loginMember(value));
   };
-  console.log(member_credent);
+  useEffect(() => {
+    member_credent && dispatch(getListCart(member_credent.id));
+  }, []);
+  // console.log(produkReducer.listCart && produkReducer.listCart.data.length);
   return (
     <div
       style={{
@@ -265,13 +270,32 @@ const NavBar = () => {
           fontSize: 14,
         }}
       />
-      <ShoppingOutlined
-        style={{
-          color: color.blue,
-          marginLeft: 15,
-          fontSize: 30,
-        }}
-      />
+      <Badge
+        size="small"
+        count={
+          produkReducer.listCart &&
+          produkReducer.listCart.data
+            .map((qty) => Number(qty.quantity))
+            .reduce((a, b) => a + b, 0)
+        }
+      >
+        <ShoppingOutlined
+          onClick={() => {
+            if (member_credent) {
+              navigate(`/cart/${member_credent.id}`);
+            } else {
+              setIsModalOpen2(true);
+            }
+          }}
+          style={{
+            color: color.blue,
+            marginLeft: 15,
+            fontSize: 30,
+            cursor: "pointer",
+          }}
+        />
+      </Badge>
+
       <BellOutlined
         style={{
           color: color.blue,

@@ -1,5 +1,6 @@
 import { message } from "antd";
 import axios from "axios";
+import _ from "lodash";
 
 export const BASE_URL = "http://localhost/jamtangankuid_server";
 
@@ -335,5 +336,50 @@ export const loginMember = (data) => (dispatch) => {
     .catch((err) => {
       err_handle(err);
       dispatch({ type: "CHANGE_FETCHING_ADMIN_REDUCER", value: false });
+    });
+};
+
+export const addToCart = (data) => (dispatch) => {
+  dispatch({ type: "CHANGE_FETCHING2", value: true });
+  axios
+    .post(`${BASE_URL}/api/cart`, data)
+    .then((resp) => {
+      dispatch(getDetailProduk(data.produk_id));
+      dispatch(getListCart(data.user_id));
+      message.success("produk telah di tambahkan ke keranjang");
+      dispatch({ type: "CHANGE_FETCHING2", value: false });
+    })
+    .catch((err) => {
+      err_handle(err);
+      dispatch({ type: "CHANGE_FETCHING2", value: false });
+    });
+};
+
+export const getListCart = (id) => (dispatch) => {
+  dispatch({ type: "CHANGE_FETCHING", value: true });
+  axios
+    .get(`${BASE_URL}/api/cart/${id}`)
+    .then((resp) => {
+      dispatch({ type: "GET_LIST_CART", value: resp.data });
+      dispatch({ type: "CHANGE_FETCHING", value: false });
+    })
+    .catch((err) => {
+      err_handle(err);
+      dispatch({ type: "CHANGE_FETCHING", value: false });
+    });
+};
+
+export const deleteListCart = (data) => (dispatch) => {
+  dispatch({ type: "CHANGE_FETCHING", value: true });
+  axios
+    .delete(`${BASE_URL}/api/cart/${data.id}`)
+    .then((resp) => {
+      message.success(resp.data.message);
+      dispatch(getListCart(data.user_id));
+      dispatch({ type: "CHANGE_FETCHING", value: false });
+    })
+    .catch((err) => {
+      err_handle(err);
+      dispatch({ type: "CHANGE_FETCHING", value: false });
     });
 };
