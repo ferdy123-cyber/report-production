@@ -13,6 +13,8 @@ import Search from "./Container/Search";
 import "react-loading-skeleton/dist/skeleton.css";
 import DetailProduk from "./Container/DetailProduk";
 import Cart from "./Container/Cart";
+import QrScan from "./Container/QrScan";
+import History from "./Container/History";
 
 function App() {
   return (
@@ -42,6 +44,22 @@ function App() {
           element={
             <LoginMemberRoute>
               <Cart />
+            </LoginMemberRoute>
+          }
+        />
+        <Route
+          path="/pembayaran/:id"
+          element={
+            <LoginMemberRoute>
+              <QrScan />
+            </LoginMemberRoute>
+          }
+        />
+        <Route
+          path="/history/:id"
+          element={
+            <LoginMemberRoute>
+              <History />
             </LoginMemberRoute>
           }
         />

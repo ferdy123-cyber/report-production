@@ -297,6 +297,13 @@ const NavBar = () => {
       </Badge>
 
       <BellOutlined
+        onClick={() => {
+          if (member_credent) {
+            navigate(`/history/${member_credent.id}`);
+          } else {
+            setIsModalOpen2(true);
+          }
+        }}
         style={{
           color: color.blue,
           marginLeft: 15,

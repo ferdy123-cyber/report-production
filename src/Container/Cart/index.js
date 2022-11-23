@@ -1,11 +1,24 @@
-import { Button, Col, Divider, Image, Result, Row, Typography } from "antd";
-import { useEffect } from "react";
+import {
+  Button,
+  Col,
+  Divider,
+  Form,
+  Image,
+  Input,
+  Modal,
+  Result,
+  Row,
+  Select,
+  Typography,
+} from "antd";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { color } from "../../color";
 import NavBar from "../../Component/NavBar";
 import {
   BASE_URL,
+  checkout,
   deleteListCart,
   getListCart,
   getListProdukRekomended,
@@ -13,6 +26,7 @@ import {
 import SeparatorRibuan from "../../SeparatorRibuan";
 import { DeleteOutlined } from "@ant-design/icons";
 import Skeleton from "react-loading-skeleton";
+import QRCode from "react-qr-code";
 
 const Cart = () => {
   const { id } = useParams();
@@ -59,10 +73,88 @@ const Cart = () => {
       .reduce((a, b) => a + b, 0);
 
   const adminState = useSelector((state) => state.adminReducer);
-  console.log(produkReducer.fetching);
-  console.log(adminState.fetching);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const onFinish = (value) => {
+    if (value.metode_pembayaran === "Transfer") {
+      value.status_transaksi = "Menunggu Pembayaran";
+    } else {
+      value.status_transaksi = "Berhasil";
+    }
+    value.nomor_transaksi = Math.floor(Math.random() * 1100000000);
+    value.user_id = member_credent.id;
+    value.total_price = totalPrice - totalDiscount;
+    value.navigate = navigate;
+    // console.log(value);
+    dispatch(checkout(value));
+    form.resetFields();
+    setIsModalOpen(false);
+  };
+  const [form] = Form.useForm();
   return (
     <>
+      <Modal
+        width={400}
+        bodyStyle={{
+          backgroundColor: "#3f3f3f",
+          overflow: "hidden",
+        }}
+        footer={false}
+        open={isModalOpen}
+        onOk={() => {
+          setIsModalOpen(false);
+        }}
+        onCancel={() => setIsModalOpen(false)}
+      >
+        <Typography.Title style={{ color: color.blue }} level={3}>
+          Checkout
+        </Typography.Title>
+        <Form form={form} name="basic" onFinish={onFinish} autoComplete="off">
+          <Form.Item
+            name="metode_pembayaran"
+            rules={[
+              {
+                required: true,
+                message: "Metode pembayaran tidak boleh kosong!",
+              },
+            ]}
+          >
+            <Select
+              placeholder="Metode Pembayaran"
+              style={{
+                marginTop: 10,
+              }}
+            >
+              <Select.Option value="Bayar Ditempat">
+                Bayar Ditempat
+              </Select.Option>
+              <Select.Option value="Transfer">Transfer JKpay</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            // label="Nama"
+            name="alamat_tujuan"
+            rules={[
+              { required: true, message: "Password tidak boleh kosong!" },
+            ]}
+          >
+            <Input.TextArea rows={6} placeholder="Alamat Tujuan" />
+          </Form.Item>
+
+          <Form.Item style={{ textAlign: "end" }} wrapperCol={{ span: 24 }}>
+            {adminState.fetching ? (
+              <Button type="primary" loading>
+                Loading
+              </Button>
+            ) : (
+              <Button type="primary" htmlType="submit">
+                Beli (Rp{SeparatorRibuan(totalPrice - totalDiscount)})
+              </Button>
+            )}
+          </Form.Item>
+        </Form>
+      </Modal>
       <NavBar />
       <div
         style={{
@@ -408,6 +500,7 @@ const Cart = () => {
                     </Typography.Text>
                   </div>
                   <Button
+                    onClick={() => setIsModalOpen(true)}
                     style={{
                       marginTop: 15,
                       width: "100%",
