@@ -1,26 +1,148 @@
 import { ImportOutlined, ShoppingOutlined } from "@ant-design/icons";
-import { Button, Col, Image, Input, message, Row, Typography } from "antd";
+import {
+  Button,
+  Col,
+  Form,
+  Image,
+  Input,
+  message,
+  Modal,
+  Row,
+  Select,
+  Typography,
+} from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { color } from "../../color";
 import NavBar from "../../Component/NavBar";
-import { addToCart, BASE_URL, getDetailProduk } from "../../Reducer/Action";
+import {
+  addToCart,
+  BASE_URL,
+  buyNow,
+  getDetailProduk,
+} from "../../Reducer/Action";
 import SeparatorRibuan from "../../SeparatorRibuan";
 import Skeleton from "react-loading-skeleton";
 
 const DetailProduk = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
+  const navigation = useNavigate();
   const member_credent = JSON.parse(localStorage.getItem("member_credent"));
   const produkState = useSelector((state) => state.produkReducer);
   useEffect(() => {
     dispatch(getDetailProduk(id));
   }, [id]);
+  const [form] = Form.useForm();
+  const adminState = useSelector((state) => state.adminReducer);
   const [qty, setQty] = useState(1);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const onFinish = (value) => {
+    value.produk_id = produkState.detailProduk.id;
+    value.quantity = qty;
+    value.user_id = member_credent.id;
+    if (value.metode_pembayaran === "Transfer") {
+      value.status_transaksi = "Menunggu Pembayaran";
+    } else {
+      value.status_transaksi = "Berhasil";
+    }
+    value.nomor_transaksi = Math.floor(Math.random() * 1100000000);
+    dispatch(
+      buyNow({
+        cart: {
+          produk_id: value.produk_id,
+          user_id: value.user_id,
+          quantity: value.quantity,
+        },
+        checkout: {
+          user_id: value.user_id,
+          alamat_tujuan: value.alamat_tujuan,
+          metode_pembayaran: value.metode_pembayaran,
+          nomor_transaksi: value.nomor_transaksi,
+          total_price:
+            produkState.detailProduk.promo === "N"
+              ? Number(produkState.detailProduk.price * qty)
+              : Number(produkState.detailProduk.price_promo * qty),
+          status_transaksi: value.status_transaksi,
+          navigate: navigation,
+        },
+      })
+    );
+    form.resetFields();
+    setIsModalOpen(false);
+  };
   return (
     <>
+      <Modal
+        width={400}
+        bodyStyle={{
+          backgroundColor: "#3f3f3f",
+          overflow: "hidden",
+        }}
+        footer={false}
+        open={isModalOpen}
+        onOk={() => {
+          setIsModalOpen(false);
+        }}
+        onCancel={() => setIsModalOpen(false)}
+      >
+        <Typography.Title style={{ color: color.blue }} level={3}>
+          Beli Langsung
+        </Typography.Title>
+        <Form form={form} name="basic" onFinish={onFinish} autoComplete="off">
+          <Form.Item
+            name="metode_pembayaran"
+            rules={[
+              {
+                required: true,
+                message: "Metode pembayaran tidak boleh kosong!",
+              },
+            ]}
+          >
+            <Select
+              placeholder="Metode Pembayaran"
+              style={{
+                marginTop: 10,
+              }}
+            >
+              <Select.Option value="Bayar Ditempat">
+                Bayar Ditempat
+              </Select.Option>
+              <Select.Option value="Transfer">Transfer JKpay</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            // label="Nama"
+            name="alamat_tujuan"
+            rules={[
+              { required: true, message: "Password tidak boleh kosong!" },
+            ]}
+          >
+            <Input.TextArea rows={6} placeholder="Alamat Tujuan" />
+          </Form.Item>
+
+          <Form.Item style={{ textAlign: "end" }} wrapperCol={{ span: 24 }}>
+            {adminState.fetching ? (
+              <Button type="primary" loading>
+                Loading
+              </Button>
+            ) : (
+              <Button type="primary" htmlType="submit">
+                Beli (Rp
+                {produkState.detailProduk &&
+                  (produkState.detailProduk.promo === "N"
+                    ? SeparatorRibuan(produkState.detailProduk.price * qty)
+                    : SeparatorRibuan(
+                        produkState.detailProduk.price_promo * qty
+                      ))}
+                )
+              </Button>
+            )}
+          </Form.Item>
+        </Form>
+      </Modal>
       <NavBar />
       <div
         style={{
@@ -263,6 +385,7 @@ const DetailProduk = () => {
                 <Button
                   onClick={() => {
                     if (member_credent) {
+                      setIsModalOpen(true);
                     } else {
                       message.error("silahkan login untuk melakukan pembelian");
                     }

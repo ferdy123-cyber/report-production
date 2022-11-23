@@ -32,7 +32,7 @@ const { Header, Sider, Content } = Layout;
 
 const Home = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [key, setKey] = useState("1");
+  const [key, setKey] = useState("2");
 
   const user_credent = JSON.parse(localStorage.getItem("user_credent"));
 
@@ -54,11 +54,11 @@ const Home = () => {
           mode="inline"
           defaultSelectedKeys={[key]}
           items={[
-            {
-              key: "1",
-              icon: <HomeFilled />,
-              label: "Dashboard",
-            },
+            // {
+            //   key: "1",
+            //   icon: <HomeFilled />,
+            //   label: "Dashboard",
+            // },
             {
               key: "2",
               icon: <ProjectOutlined />,

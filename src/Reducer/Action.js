@@ -5,7 +5,7 @@ import _ from "lodash";
 export const BASE_URL = "http://localhost/jamtangankuid_server";
 
 const err_handle = (err) => {
-  // console.log(err);
+  console.log(err);
   if (err.response.data.message) {
     message.error(err.response.data.message);
   } else if (err.message) {
@@ -354,6 +354,21 @@ export const addToCart = (data) => (dispatch) => {
       dispatch({ type: "CHANGE_FETCHING2", value: false });
     });
 };
+export const addToCart2 = (data) => (dispatch) => {
+  dispatch({ type: "CHANGE_FETCHING2", value: true });
+  axios
+    .post(`${BASE_URL}/api/cart`, data)
+    .then((resp) => {
+      dispatch(getDetailProduk(data.produk_id));
+      dispatch(getListCart(data.user_id));
+      message.success("checkout berhasil");
+      dispatch({ type: "CHANGE_FETCHING2", value: false });
+    })
+    .catch((err) => {
+      err_handle(err);
+      dispatch({ type: "CHANGE_FETCHING2", value: false });
+    });
+};
 
 export const getListCart = (id) => (dispatch) => {
   dispatch({ type: "CHANGE_FETCHING", value: true });
@@ -376,6 +391,57 @@ export const deleteListCart = (data) => (dispatch) => {
     .then((resp) => {
       message.success(resp.data.message);
       dispatch(getListCart(data.user_id));
+      dispatch({ type: "CHANGE_FETCHING", value: false });
+    })
+    .catch((err) => {
+      err_handle(err);
+      dispatch({ type: "CHANGE_FETCHING", value: false });
+    });
+};
+
+export const checkout = (data) => (dispatch) => {
+  dispatch({ type: "CHANGE_FETCHING", value: true });
+  axios
+    .post(`${BASE_URL}/api/transaksi`, data)
+    .then((resp) => {
+      if (data.metode_pembayaran === "Transfer") {
+        data.navigate(`/pembayaran/${resp.data.id}`);
+      }
+      dispatch(getListCart(data.user_id));
+      message.success("checkout berhasil");
+      dispatch({ type: "CHANGE_FETCHING", value: false });
+    })
+    .catch((err) => {
+      err_handle(err);
+      dispatch({ type: "CHANGE_FETCHING", value: false });
+    });
+};
+
+export const buyNow = (data) => (dispatch) => {
+  dispatch({ type: "CHANGE_FETCHING", value: true });
+  axios
+    .post(`${BASE_URL}/api/transaksi`, data.checkout)
+    .then((resp) => {
+      data.cart.transaction_id = resp.data.id;
+      dispatch(addToCart2(data.cart));
+      if (data.checkout.metode_pembayaran === "Transfer") {
+        data.checkout.navigate(`/pembayaran/${resp.data.id}`);
+      }
+      // message.success("checkout berhasil");
+      dispatch({ type: "CHANGE_FETCHING", value: false });
+    })
+    .catch((err) => {
+      err_handle(err);
+      dispatch({ type: "CHANGE_FETCHING", value: false });
+    });
+};
+
+export const getHistory = (data) => (dispatch) => {
+  dispatch({ type: "CHANGE_FETCHING", value: true });
+  axios
+    .get(`${BASE_URL}/api/transaksi`, { params: data })
+    .then((resp) => {
+      dispatch({ type: "GET_HISTORY", value: resp.data.data });
       dispatch({ type: "CHANGE_FETCHING", value: false });
     })
     .catch((err) => {

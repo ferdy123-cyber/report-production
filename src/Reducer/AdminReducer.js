@@ -4,6 +4,7 @@ const initialstate = {
   listProdukPromo: null,
   listProdukRekomended: null,
   listPoster: null,
+  history: [],
   fetching: false,
   fetching2: false,
 };
@@ -49,6 +50,12 @@ const AdminReducer = (state = initialstate, action) => {
     return {
       ...state,
       listProdukRekomended: action.value,
+    };
+  }
+  if (action.type === "GET_HISTORY") {
+    return {
+      ...state,
+      history: action.value,
     };
   }
   return state;
