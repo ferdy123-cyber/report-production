@@ -4,10 +4,9 @@ import {
   combineReducers,
 } from "redux";
 import thunk from "redux-thunk";
-import adminReducer from "./Reducer/AdminReducer";
-import produkReducer from "./Reducer/ProdukReducer";
+import reducer from "./Reducer/Reducer";
 
-const root = combineReducers({ adminReducer, produkReducer });
+const root = combineReducers({ reducer });
 
 const store = createStore(root, applyMiddleware(thunk));
 

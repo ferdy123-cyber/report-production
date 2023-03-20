@@ -1,40 +1,22 @@
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  HomeFilled,
-  UserOutlined,
   ProjectOutlined,
-  FileImageOutlined,
-  FallOutlined,
-  CheckSquareOutlined,
 } from "@ant-design/icons";
-import {
-  Button,
-  Image,
-  Layout,
-  Menu,
-  message,
-  Popconfirm,
-  Typography,
-} from "antd";
+import { Button, Layout, Menu, message, Popconfirm, Typography } from "antd";
 import React, { useState } from "react";
+import MasterBarang from "../MasterBarang";
+import MasterDefect from "../MasterDefect";
+import ReportNg from "../ReportNg";
+import ReportOk from "../ReportOk";
 // import { useSelector } from "react-redux";
 import "./index.css";
-import ListAdmin from "./ListAdmin/index.js";
-import logo from "../../Image/20221111_194411_0000.png";
-import ListProduk from "./ListProduk";
-import ListPoster from "./ListPoster";
-import ListPromo from "./ListPromo";
-import ListRekomended from "./ListRekomended";
-import Dashboard from "./Dashboard";
 
 const { Header, Sider, Content } = Layout;
 
-const Home = () => {
+const DashBoard = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [key, setKey] = useState("2");
-
-  const user_credent = JSON.parse(localStorage.getItem("user_credent"));
 
   return (
     <Layout style={{ height: "100vh" }}>
@@ -43,9 +25,12 @@ const Home = () => {
           style={{ textAlign: "center", marginTop: 20, marginBottom: 15 }}
           className="logo"
         >
-          <Image src={logo} width={50} height={50} alt="" preview={false} />
-          <Typography.Title style={{ color: "white", marginTop: 10 }} level={5}>
-            jamtanganku.id
+          {/* <Image src={logo} width={50} height={50} alt="" preview={false} /> */}
+          <Typography.Title
+            style={{ color: "white", marginTop: 10, marginBottom: 10 }}
+            level={5}
+          >
+            ReportProduction PT Bobaek Jaya Indonesia
           </Typography.Title>
         </div>
         <Menu
@@ -54,35 +39,25 @@ const Home = () => {
           mode="inline"
           defaultSelectedKeys={[key]}
           items={[
-            // {
-            //   key: "1",
-            //   icon: <HomeFilled />,
-            //   label: "Dashboard",
-            // },
             {
               key: "2",
               icon: <ProjectOutlined />,
-              label: "Produk",
+              label: "List Barang",
             },
             {
               key: "3",
-              icon: <FileImageOutlined />,
-              label: "Poster",
+              icon: <ProjectOutlined />,
+              label: "List Defect",
             },
             {
               key: "4",
-              icon: <FallOutlined />,
-              label: "Promo",
+              icon: <ProjectOutlined />,
+              label: "Report Ok",
             },
             {
               key: "5",
-              icon: <CheckSquareOutlined />,
-              label: "Rekomendasi",
-            },
-            user_credent.role_id === "3" && {
-              key: "6",
-              icon: <UserOutlined />,
-              label: "Data Admin",
+              icon: <ProjectOutlined />,
+              label: "Report Ng",
             },
           ]}
         />
@@ -126,16 +101,14 @@ const Home = () => {
             overflow: "auto",
           }}
         >
-          {key === "1" && <Dashboard />}
-          {key === "2" && <ListProduk />}
-          {key === "3" && <ListPoster />}
-          {key === "4" && <ListPromo />}
-          {key === "5" && <ListRekomended />}
-          {key === "6" && <ListAdmin />}
+          {key === "2" && <MasterBarang />}
+          {key === "3" && <MasterDefect />}
+          {key === "4" && <ReportOk />}
+          {key === "5" && <ReportNg />}
         </Content>
       </Layout>
     </Layout>
   );
 };
 
-export default Home;
+export default DashBoard;

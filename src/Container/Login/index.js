@@ -10,15 +10,11 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const userState = useSelector((state) => state.adminReducer);
+  const userState = useSelector((state) => state.reducer);
   const onFinish = (values) => {
     values.navigate = navigate;
     dispatch(login(values));
   };
-  // const onFinishFailed = (errorInfo) => {
-  //   console.log("Failed:", errorInfo);
-  // };
-
   return (
     <Form
       name="normal_login"
@@ -39,16 +35,13 @@ const Login = () => {
         </p>
       </div>
       <Form.Item
-        name="email"
-        rules={[
-          { required: true, message: "Email tidak boleh kosong!" },
-          { type: "email", message: "Format email tidak valid" },
-        ]}
+        name="username"
+        rules={[{ required: true, message: "Email tidak boleh kosong!" }]}
       >
         <Input
           prefix={<UserOutlined className="site-form-item-icon" />}
-          type="email"
-          placeholder="Email"
+          // type=""
+          placeholder="Username"
         />
       </Form.Item>
       <Form.Item
@@ -62,7 +55,7 @@ const Login = () => {
         />
       </Form.Item>
       <Form.Item>
-        {userState.fetching ? (
+        {userState.fetchingAuth ? (
           <Button
             loading
             type="primary"
