@@ -153,6 +153,7 @@ const ReportNg = () => {
   ];
   const [isModalOpen, setIsModalOpen] = useState(false);
   const onFinish = (value) => {
+    setparam({ ...param, offset: 0, tanggal: moment().format("YYYY-MM-DD") });
     dispatch(createProdNg(value));
     setIsModalOpen(false);
     // console.log(data);
