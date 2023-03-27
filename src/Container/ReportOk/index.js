@@ -142,12 +142,13 @@ const ReportOk = () => {
   ];
   const [isModalOpen, setIsModalOpen] = useState(false);
   const onFinish = (value) => {
-    const data = { ...value, man_power: user_credent.username };
-    dispatch(createProdOk(data));
+    // const data = { ...value, man_power: user_credent.username };
+    // dispatch(createProdOk(data));
+    dispatch(createProdOk(value));
     setIsModalOpen(false);
     // console.log(data);
   };
-  console.log(state.mBarang);
+  // console.log(state.mBarang);
   return (
     <div>
       <Row>
@@ -180,6 +181,15 @@ const ReportOk = () => {
               rules={[{ required: true, message: "lot tidak boleh kosong!" }]}
             >
               <InputNumber style={{ width: "100%" }} />
+            </Form.Item>
+            <Form.Item
+              label="Man Power"
+              name="man_power"
+              rules={[
+                { required: true, message: "Man power tidak boleh kosong!" },
+              ]}
+            >
+              <Input style={{ width: "100%" }} />
             </Form.Item>
             <Form.Item
               label="Part Nomor"

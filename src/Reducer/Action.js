@@ -31,6 +31,20 @@ export const login = (data) => (dispatch) => {
     });
 };
 
+export const register = (data) => (dispatch) => {
+  dispatch({ type: "CHANGE_FETCHING_AUTH", value: true });
+  axios
+    .post(`${BASE_URL}/auth/register`, data)
+    .then((resp) => {
+      dispatch({ type: "CHANGE_FETCHING_AUTH", value: false });
+      message.success(resp.data.message);
+    })
+    .catch((err) => {
+      err_handle(err);
+      dispatch({ type: "CHANGE_FETCHING_AUTH", value: false });
+    });
+};
+
 export const getMasterBarang = (data) => (dispatch) => {
   dispatch({ type: "CHANGE_FETCHING_GET", value: true });
   axios

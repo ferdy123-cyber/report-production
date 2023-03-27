@@ -273,7 +273,7 @@ const ReportNg = () => {
             style={{ marginRight: 10 }}
             picker="month"
           />
-          <Button
+          {/* <Button
             style={{
               marginRight: 10,
               backgroundColor: "#389e0d",
@@ -283,7 +283,7 @@ const ReportNg = () => {
             type="primary"
           >
             Export Excel
-          </Button>
+          </Button> */}
           <Button onClick={() => setIsModalOpen(true)} type="primary">
             Input Report Ng
           </Button>
