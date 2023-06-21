@@ -126,11 +126,11 @@ const MasterDefect = () => {
         <Col span={12}>
           <Typography.Title level={5}>List Defect</Typography.Title>
         </Col>
-        <Col span={12} style={{ textAlign: "end" }}>
+        {/* <Col span={12} style={{ textAlign: "end" }}>
           <Button onClick={() => setIsModalOpen(true)} type="primary">
             Tambah Defect
           </Button>
-        </Col>
+        </Col> */}
       </Row>
       <Table
         loading={state.fetchingGet}
