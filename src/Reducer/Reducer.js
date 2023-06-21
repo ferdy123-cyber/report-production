@@ -5,9 +5,11 @@ const initialstate = {
   mDefect: null,
   reportOk: null,
   reportNg: null,
+  reportExcel: null,
   fetchingGet: false,
   fetchingDelete: false,
   fetchingAdd: false,
+  fetchingExport: false,
   refreshdata: null,
 };
 
@@ -58,6 +60,18 @@ const AuthReducer = (state = initialstate, action) => {
     return {
       ...state,
       reportNg: action.value,
+    };
+  }
+  if (action.type === "CHANGE_REPORT_EXCEL") {
+    return {
+      ...state,
+      reportExcel: action.value,
+    };
+  }
+  if (action.type === "CHANGE_FETCHING_EXPORT_EXCEL") {
+    return {
+      ...state,
+      fetchingExport: action.value,
     };
   }
   return state;

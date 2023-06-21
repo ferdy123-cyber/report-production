@@ -222,3 +222,33 @@ export const createProdNg = (data) => (dispatch) => {
       dispatch({ type: "CHANGE_FETCHING_ADD", value: false });
     });
 };
+
+// report excel
+
+export const getReportExcel = (data) => (dispatch) => {
+  dispatch({ type: "CHANGE_FETCHING_GET", value: true });
+  axios
+    .get(`${BASE_URL}/reportExcel/get`, { params: data })
+    .then((resp) => {
+      dispatch({ type: "CHANGE_REPORT_EXCEL", value: resp.data });
+      dispatch({ type: "CHANGE_FETCHING_GET", value: false });
+    })
+    .catch((err) => {
+      err_handle(err);
+      dispatch({ type: "CHANGE_FETCHING_GET", value: false });
+    });
+};
+
+export const exportExcel = (data) => (dispatch) => {
+  dispatch({ type: "CHANGE_FETCHING_EXPORT_EXCEL", value: true });
+  axios
+    .get(`${BASE_URL}/reportExcel/exportExcel`, { params: data })
+    .then((resp) => {
+      // dispatch({ type: "CHANGE_REPORT_EXCEL", value: resp.data });
+      dispatch({ type: "CHANGE_FETCHING_EXPORT_EXCEL", value: false });
+    })
+    .catch((err) => {
+      err_handle(err);
+      dispatch({ type: "CHANGE_FETCHING_EXPORT_EXCEL", value: false });
+    });
+};

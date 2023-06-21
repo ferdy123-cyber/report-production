@@ -9,6 +9,7 @@ import MasterBarang from "../MasterBarang";
 import MasterDefect from "../MasterDefect";
 import ReportNg from "../ReportNg";
 import ReportOk from "../ReportOk";
+import ReportExcel from "../ReportExcel";
 // import { useSelector } from "react-redux";
 import "./index.css";
 
@@ -59,6 +60,11 @@ const DashBoard = () => {
               icon: <ProjectOutlined />,
               label: "Report Ng",
             },
+            {
+              key: "6",
+              icon: <ProjectOutlined />,
+              label: "Report Excel",
+            },
           ]}
         />
       </Sider>
@@ -105,6 +111,7 @@ const DashBoard = () => {
           {key === "3" && <MasterDefect />}
           {key === "4" && <ReportOk />}
           {key === "5" && <ReportNg />}
+          {key === "6" && <ReportExcel />}
         </Content>
       </Layout>
     </Layout>
